@@ -1,5 +1,7 @@
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+
 export async function generateStudyDeck(input, signal) {
-  const response = await fetch("/api/generate", {
+  const response = await fetch(`${API_BASE_URL}/api/generate`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ input }),
@@ -10,7 +12,8 @@ export async function generateStudyDeck(input, signal) {
 
   if (!response.ok) {
     throw new Error(
-      payload?.error?.message || `Request failed with status ${response.status}.`
+      payload?.error?.message ||
+        `Request failed with status ${response.status}.`
     );
   }
 
@@ -22,6 +25,9 @@ export async function generateStudyDeck(input, signal) {
 }
 
 export function getErrorMessage(error) {
-  if (error?.name === "AbortError") return "Generation was cancelled.";
+  if (error?.name === "AbortError") {
+    return "Generation was cancelled.";
+  }
+
   return error?.message || "Something went wrong. Please try again.";
 }
